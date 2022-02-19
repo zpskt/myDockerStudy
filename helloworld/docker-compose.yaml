@@ -4,30 +4,32 @@ services:
     image: mysql:5.7.14
     environment:
       MYSQL_ROOT_PASSWORD: "zhangpeng"
-      MYSQL_DATABASE: "seckill"
+#      MYSQL_DATABASE: "seckill"
     command: [
       '--character-set-server=utf8mb4',
       '--collation-server=utf8mb4_unicode_ci',
     ]
-    expose:
-      - "3306"
     ports:
       - "3306:3306"
-  redis:
-      image: redis
-      expose:
-        - "6379"
-      ports:
-        - "6379:6379"
-  consul:
-    image: consul:latest
-    container_name: myconsul
-    # ports:
-    #   - "8500:8500"
-#    command: agent -client=0.0.0.0 -retry-join=consul1 -ui -node=client1 -datacenter=dc1
-    command: agent -server -bootstrap -ui -node=1 -client='0.0.0.0'
-  hellogo:
-    build: .
-    container_name: hellogo
-    # ports:
-    #   - "8080:8080"
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+#  redis:
+#    image: redis
+##    container_name: my_redis
+#    command: redis-server --requirepass "zhangpeng"  #设置redis密码
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - ./data:/data
+#  consul:
+#    image: consul:latest
+#    container_name: myconsul
+#    # ports:
+#    #   - "8500:8500"
+##    command: agent -client=0.0.0.0 -retry-join=consul1 -ui -node=client1 -datacenter=dc1
+#    command: agent -server -bootstrap -ui -node=1 -client='0.0.0.0'
+#  hellogo:
+#    build: .
+#    container_name: hellogo
+#    # ports:
+#    #   - "8080:8080"
