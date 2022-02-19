@@ -1,0 +1,33 @@
+version: '2'  #设定版本
+services:
+  mysql:
+    image: mysql:5.7.14
+    environment:
+      MYSQL_ROOT_PASSWORD: "zhangpeng"
+      MYSQL_DATABASE: "seckill"
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+    ]
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+  redis:
+      image: redis
+      expose:
+        - "6379"
+      ports:
+        - "6379:6379"
+  consul:
+    image: consul:latest
+    container_name: myconsul
+    # ports:
+    #   - "8500:8500"
+#    command: agent -client=0.0.0.0 -retry-join=consul1 -ui -node=client1 -datacenter=dc1
+    command: agent -server -bootstrap -ui -node=1 -client='0.0.0.0'
+  hellogo:
+    build: .
+    container_name: hellogo
+    # ports:
+    #   - "8080:8080"
