@@ -1,5 +1,10 @@
 version: '2'  #设定版本
 services:
+#  zoo1:
+#    image: zookeeper:latest
+#    #    restart: always
+#    ports:
+#      - "2181:2181"
   mysql:
     image: mysql:5.7.14
     environment:
@@ -13,14 +18,14 @@ services:
       - "3306:3306"
     volumes:
       - ./sql:/docker-entrypoint-initdb.d   #所有这个目录下的sql都会执行
-#  redis:
-#    image: redis
-##    container_name: my_redis
-#    command: redis-server --requirepass "zhangpeng"  #设置redis密码
-#    ports:
-#      - "6379:6379"
-#    volumes:
-#      - ./data:/data
+  redis:
+    image: redis
+#    container_name: my_redis
+    command: redis-server --requirepass "zhangpeng"  #设置redis密码
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
 #  consul:
 #    image: consul:latest
 #    container_name: myconsul

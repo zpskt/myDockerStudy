@@ -1,5 +1,8 @@
 #原镜像
-FROM golang:1.17 
+FROM golang:1.17
+#设置作者
+MAINTAINER zp 2233151897@qq.com
+
 #新建文件夹
 RUN mkdir /app
 #复制代码
