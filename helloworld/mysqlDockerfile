@@ -1,0 +1,8 @@
+#原镜像
+FROM mysql:5.7.14
+#设置作者
+MAINTAINER zp 2233151897@qq.com
+COPY ./sql /docker-entrypoint-initdb.d
+WORKDIR /docker-entrypoint-initdb.d
+ENV LANG=C.UTF-8
+EXPOSE 3306

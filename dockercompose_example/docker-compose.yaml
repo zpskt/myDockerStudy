@@ -1,8 +1,96 @@
-version: '3.6'  #设定版本
+version: '3'  #设定版本
+networks:   #设置自定义网络
+  community: #自定义网络名
+    driver: bridge #设置网卡驱动
+    ipam:
+      config:
+        - subnet: 192.168.50.0/24 #设置网关
 services:
-  eureka:   #指定服务名称
-    build: .  #指定Dockerfile所有路径
+  consul: #服务名
+    image: consul:latest #dockerHub中的镜像
+    container_name: secconsul #设置容器名字。同一services里面，不同容器访问靠这个container_name进行解析host成局域网IP地址
+    # networks:                 #自定义设置网络，可以指定容器的ip地址
+    #   community:
+    #     ipv4_address: 192.168.50.13
+
+    expose: #开放容器之间访问端口
+      - "8500"
+    ports:  #设置容器和物理机端口映射
+      - "8500:8500"
+    #    command: agent -client=0.0.0.0 -retry-join=consul1 -ui -node=client1 -datacenter=dc1
+    command: agent -server -bootstrap -ui -node=1 -client='0.0.0.0' #开机执行命令
+  zoo1:
+    image: zookeeper:latest
+#    restart: always
+    container_name: seczool
+    expose:
+      - "2181"
     ports:
-      - “8761:8761” #指定端口映射，类似docker run的-p选项，注意使用字符串形式
+      - "2181:2181"
+  mysql:
+    image: mysql:5.7.14
+#    image: mysql:8.0.20
+    container_name: secmysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "zhangpeng"
+#      MYSQL_DATABASE: "seckill"
+    command: [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+        '--default-authentication-plugin=mysql_native_password' #这行代码解决无法访问的问题
+    ]
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d   #文件夹映射。所有这个目录下的sql都会执行
+  redis:
+    image: redis
+    container_name: secredis
 
+    #    container_name: my_redis
+    command: redis-server --requirepass "zhangpeng"  #设置redis密码
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data:/data
+  admin:
+    image: zpskt/seckill_admin:1.0
+    container_name: sk-admin
 
+    depends_on: #设置此服务容器依赖的服务
+      - consul
+      - zoo1
+      - mysql
+      - redis
+    expose:
+      - "9030"
+    ports:
+      - "9030:9030"
+  app:
+    image: zpskt/seckill_app:1.0
+    container_name: sk-app
+    depends_on:
+      - consul
+      - zoo1
+      - mysql
+      - redis
+    expose:
+      - "9031"
+    ports:
+      - "9031:9031"
+  core:
+    image: zpskt/seckill_core:1.0
+    container_name: sk-core
+    depends_on:
+      - consul
+      - zoo1
+      - mysql
+      - redis
+    expose:
+      - "9032"
+    ports:
+      - "9032:9032"

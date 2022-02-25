@@ -1,7 +1,7 @@
 #基于哪个镜像
 FROM java:8
-#将本地文件夹挂载到当前容器
-vomume /tmp
+##将本地文件夹挂载到当前容器 一般镜像不挂载，在容器化时挂载
+#volumes: /tmp
 #复制文件到容器
 ADD xxx.jar app.jar
 RUN bash -c 'touch /app.jar'

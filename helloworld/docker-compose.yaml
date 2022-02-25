@@ -16,16 +16,16 @@ services:
     ]
     ports:
       - "3306:3306"
-    volumes:
-      - ./sql:/docker-entrypoint-initdb.d   #所有这个目录下的sql都会执行
-  redis:
-    image: redis
-#    container_name: my_redis
-    command: redis-server --requirepass "zhangpeng"  #设置redis密码
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./data:/data
+#    volumes:
+#      - ./sql:/docker-entrypoint-initdb.d   #所有这个目录下的sql都会执行
+#  redis:
+#    image: redis
+##    container_name: my_redis
+#    command: redis-server --requirepass "zhangpeng"  #设置redis密码
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - ./data:/data
 #  consul:
 #    image: consul:latest
 #    container_name: myconsul

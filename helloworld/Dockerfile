@@ -16,6 +16,5 @@ ENV GOPROXY https://goproxy.cn,direct
 #go构建可执行文件
 RUN go build .
 
-
 #最终运行docker的命令
 ENTRYPOINT  ["./helloworld"]
