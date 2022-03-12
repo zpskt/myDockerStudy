@@ -1,7 +1,5 @@
-# myDockerStudy
-docker学习的案例  
-我放了一些我使用的案例，docker-compose，dockerfile，k8s的配置文件我都放进去了。  
-在k8s_example/command.md中我放了一些常用的kubectl命令  
-this is a test
-test2  
-test3
+# myDockerStudy  
+this is mu docker study examples.  
+I put some example in this reposity.  
+And in the k8s_example/command.md ,i wirte some kubectl command
+
